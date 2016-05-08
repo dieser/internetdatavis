@@ -73,7 +73,7 @@ app.init = function() {
   var sphereGeometry = new THREE.SphereGeometry(100, 60, 60);
   var sphereMaterial = new THREE.MeshLambertMaterial({
     color: 0xFFFFFF,
-    map: THREE.ImageUtils.loadTexture("images/worldtexture.png")
+    map: THREE.ImageUtils.loadTexture("images/worldtexture.jpg")
   });
 
   app.sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
