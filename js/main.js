@@ -1,18 +1,23 @@
 
-//app vars, particles and control default settings
+/////////////////////////////////////////
+///////// MAIN THREE JS FILE ///////////
+///////////////////////////////////////
 
+///////////////////////////////////////
+//app vars, particles and control default settings
+///////////////////////////////////////
 var app = app || {};
 app.step = 0;
 
 
 app.controller = {
-  rotationSpeed: 0.002,
-  bouncingSpeed: 0.00
+  rotationSpeed: 0.002
 };
 /////////////////////////////////////////////
 
-///animate function
-
+///////////////////////////////////////
+/////// animate earth function ///////
+/////////////////////////////////////
 app.animate = function(){
 
   app.stats.update();
@@ -34,8 +39,6 @@ app.animate = function(){
 
 /////////////////////////////////////////////
 
-
-
 /////////////////////////////////////////////
 //////////// Creating Scene ////////////////
 ///////////////////////////////////////////
@@ -48,12 +51,13 @@ app.init = function() {
   app.height = window.innerHeight;
 
 
-
-//camera
+///////////////////////////////////////
+////////////// camera ////////////////
+/////////////////////////////////////
   app.camera = new THREE.PerspectiveCamera(60, app.width/app.height, 0.1, 3000);
 
-  app.camera.position.x = 150;
-  app.camera.position.y = 30;
+  app.camera.position.x = 200;
+  app.camera.position.y = 0;
   app.camera.position.z = -150;
 
   app.camera.lookAt( app.scene.position );
@@ -93,7 +97,10 @@ app.init = function() {
 
   app.spotLight = new THREE.SpotLight( 0xFFFFFF );
   app.spotLight.position.set(10000, 100, 100);
-  // app.spotLight.castShadow = true;
+
+  /* --shadow off while testing (or to save battery)
+  app.spotLight.castShadow = true;
+  */
   app.scene.add( app.spotLight );
 
 
@@ -117,8 +124,6 @@ app.init = function() {
 
   app.gui = new dat.GUI();
   app.gui.add(app.controller, 'rotationSpeed', 0, 0.1);
-  app.gui.add(app.controller, 'bouncingSpeed', 0, 2.0);
-
   app.stats = app.addStats();
 
   document.getElementById("output").appendChild( app.renderer.domElement );
