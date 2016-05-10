@@ -25,7 +25,6 @@ app.animate = function(){
   app.stats.update();
 
   app.sphere.rotation.y += app.controller.rotationSpeed;
-  
 
   app.renderer.render( app.scene, app.camera );
 
@@ -77,7 +76,7 @@ app.init = function() {
 ////////////////////////////////////////
 
 
-  var sphereGeometry = new THREE.SphereGeometry(100, 60, 60, 20);
+  var sphereGeometry = new THREE.SphereGeometry(100, 60, 60, 0);
   var sphereMaterial = new THREE.MeshLambertMaterial({
     color: 0xFFFFFF,
     map: THREE.ImageUtils.loadTexture("images/worldtexture.jpg")
@@ -99,7 +98,17 @@ app.init = function() {
 ///////////////////////////////////////////
 
   app.spotLight = new THREE.SpotLight( 0xFFFFFF );
-  app.spotLight.position.set(10000, 100, 100);
+  app.spotLight.position.set(500, 100, 100);
+
+  /* --shadow off while testing (or to save battery)
+  app.spotLight.castShadow = true;
+  */
+  app.scene.add( app.spotLight );
+
+//backlight
+
+  app.spotLight = new THREE.SpotLight( 0xFFFFFF );
+  app.spotLight.position.set(-500, 100, 400);
 
   /* --shadow off while testing (or to save battery)
   app.spotLight.castShadow = true;
@@ -107,9 +116,18 @@ app.init = function() {
   app.scene.add( app.spotLight );
 
 
-  var light = new THREE.PointLight( 0x000000, 10000, 1000 );
-  light.position.set( 150, 10, 10 );
-  app.scene.add( light );
+  //test cube for light
+  // var sphereGeometry2 = new THREE.SphereGeometry(10, 60, 60, 0);
+  // var sphereMaterial2 = new THREE.MeshLambertMaterial({
+  //   color: 0xFFFFFF,
+  //   map: THREE.ImageUtils.loadTexture("images/worldtexture.jpg")
+  // });
+  //
+  // app.sphere2 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  //
+  // app.sphere.position.set(-500, 00, 00);
+  // // app.sphere.castShadow = true;
+  // app.scene.add( app.sphere2 );
 
 
 /* --add particle renderer */
