@@ -58,9 +58,9 @@ app.init = function() {
 /////////////////////////////////////
   app.camera = new THREE.PerspectiveCamera(80, app.width/app.height, 0.1, 1000);
 
-  app.camera.position.x = 200;
+  app.camera.position.x = 180;
   app.camera.position.y = 0;
-  app.camera.position.z = -150;
+  app.camera.position.z = -100;
 
   app.camera.lookAt( app.scene.position );
 
@@ -250,6 +250,9 @@ function addDensity(data) {
 
 data = data.features[2].geometry.coordinates[0];
 //first loop: over data.features[]
+  for (var i = 0; i < data.features.length; i++) {
+    data.features[i]
+  }
   //2nd loop: over data.features[n].geometry.coordinates[] - in case of multiple shapes
 
       //third loop: over each set of points, as below: coordinates.length
