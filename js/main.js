@@ -54,7 +54,7 @@ app.init = function() {
 ///////////////////////////////////////
 ////////////// camera ////////////////
 /////////////////////////////////////
-  app.camera = new THREE.PerspectiveCamera(60, app.width/app.height, 0.1, 3000);
+  app.camera = new THREE.PerspectiveCamera(80, app.width/app.height, 0.1, 1000);
 
   app.camera.position.x = 200;
   app.camera.position.y = 0;
@@ -165,8 +165,6 @@ app.addStats = function(){
 
 /////////////////////////////////////////////
 
-
-
 /////////////////////////////////////////////
 ////////// update view on resize ///////////
 ///////////////////////////////////////////
@@ -184,4 +182,19 @@ app.onResize = function(){
 };
 
 window.addEventListener("resize", app.onResize);
+/////////////////////////////////////////////
+
+////////////////////////////////////////////////////
+/// change from cartesian co-ords to long + lat ///
+//////////////////////////////////////////////////
+function latLongToVector3(lat, lon, radius, heigth) {
+    var phi = (lat)*Math.PI/180;
+    var theta = (lon-180)*Math.PI/180;
+
+    var x = -(radius+heigth) * Math.cos(phi) * Math.cos(theta);
+    var y = (radius+heigth) * Math.sin(phi);
+    var z = (radius+heigth) * Math.cos(phi) * Math.sin(theta);
+
+    return new THREE.Vector3(x,y,z);
+}
 /////////////////////////////////////////////
