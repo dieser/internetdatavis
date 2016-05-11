@@ -1,0 +1,30 @@
+h1 {
+  margin: 0px;
+  padding: 5px;
+  font-size: 40px;
+  line-height: 45px;
+  text-align: center;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #111;
+}
+
+.container {
+  max-width: 940px;
+  margin: 0 auto;
+  color: gainsboro;
+}
+
+.container p {
+  font-size: 16px;
+  margin: 0;
+  text-align: center;
+}
+
+.container .disclaimer {
+  font-size: 14px;
+  text-align: center;
+}
