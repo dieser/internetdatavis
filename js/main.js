@@ -1,4 +1,3 @@
-
 /////////////////////////////////////////
 ///////// MAIN THREE JS FILE ///////////
 ///////////////////////////////////////
@@ -20,21 +19,21 @@ app.controller = {
 ///////////////////////////////////////
 /////// animate earth function ///////
 /////////////////////////////////////
-app.animate = function(){
+app.animate = function() {
 
   app.stats.update();
 
   app.sphere.rotation.y += app.controller.rotationSpeed;
 
-  app.renderer.render( app.scene, app.camera );
+  app.renderer.render(app.scene, app.camera);
 
-  requestAnimationFrame( app.animate );
+  requestAnimationFrame(app.animate);
 
 };
 /////////////////////////////////////////////
 
-///////////////////////////////////////
-///// Animate particles function /////
+////////////////////////////////////////
+///// Animate background function /////
 //////////////////////////////////////
 
 /* removed until needed */
@@ -47,131 +46,239 @@ app.animate = function(){
 
 app.init = function() {
 
-  app.scene = new THREE.Scene();
+    app.scene = new THREE.Scene();
 
-  app.width = window.innerWidth;
-  app.height = window.innerHeight;
-
-
-///////////////////////////////////////
-////////////// camera ////////////////
-/////////////////////////////////////
-  app.camera = new THREE.PerspectiveCamera(80, app.width/app.height, 0.1, 1000);
-
-  app.camera.position.x = 180;
-  app.camera.position.y = 0;
-  app.camera.position.z = -100;
-
-  app.camera.lookAt( app.scene.position );
-
-  app.renderer = new THREE.WebGLRenderer();
-  app.renderer.setSize(app.width, app.height);
-  app.renderer.setClearColor( 0x111111 );
-
-/////////////////////////////////////////////
+    app.width = window.innerWidth;
+    app.height = window.innerHeight;
 
 
-//////////////////////////////////////////
-//////////// Rendering Globe ////////////
-////////////////////////////////////////
+    ///////////////////////////////////////
+    ////////////// camera ////////////////
+    /////////////////////////////////////
+    app.camera = new THREE.PerspectiveCamera(80, app.width / app.height, 0.1, 1000);
+
+    app.camera.position.x = 190;
+    app.camera.position.y = 0;
+    app.camera.position.z = 0;
+
+    app.camera.lookAt(app.scene.position);
+
+    app.renderer = new THREE.WebGLRenderer();
+    app.renderer.setSize(app.width, app.height);
+    app.renderer.setClearColor(0x111111);
+
+    /////////////////////////////////////////////
 
 
-  var sphereGeometry = new THREE.SphereGeometry(100, 60, 60, 0);
-  var sphereMaterial = new THREE.MeshLambertMaterial({
-    color: 0xFFFFFF,
-    map: THREE.ImageUtils.loadTexture("images/worldtexture.jpg")
-  });
-
-  app.sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-
-  app.sphere.position.set(00, 00, 00);
-  // app.sphere.castShadow = true;
-  app.scene.add( app.sphere );
-
-/////////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////// Rendering Globe ////////////
+    ////////////////////////////////////////
 
 
+    var sphereGeometry = new THREE.SphereGeometry(100, 60, 60, 0);
+    var sphereMaterial = new THREE.MeshLambertMaterial({
+      color: 0xFFFFFF,
+      map: THREE.ImageUtils.loadTexture("images/worldtexture1.jpg")
+    });
+
+    app.sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+    app.sphere.position.set(0, 0, 0);
+    // app.sphere.castShadow = true;
+    app.scene.add(app.sphere);
+
+    /////////////////////////////////////////////
+
+    //////////////////////////////////////////
+    ////// rendering cloud diff layer //////
+    ///////////////////////////////////////
+
+    /* WIP */
+
+    /////////////////////////////////////////////
+    ////////////// Spotlight 1 /////////////////
+    ///////////////////////////////////////////
+
+    app.spotLight = new THREE.SpotLight(0xFFFFFF);
+    app.spotLight.position.set(500, 100, 100);
+
+    /* --shadow off while testing (or to save battery)
+    app.spotLight.castShadow = true;
+    */
+    app.scene.add(app.spotLight);
+
+    //backlight
+
+    app.spotLight = new THREE.SpotLight(0xFFFFFF);
+    app.spotLight.position.set(-500, 100, 400);
+
+    /* --shadow off while testing (or to save battery)
+    app.spotLight.castShadow = true;
+    */
+    app.scene.add(app.spotLight);
 
 
-/////////////////////////////////////////////
-////////////// Spotlight 1 /////////////////
-///////////////////////////////////////////
+    /* --test sphere for postioning lights
+    var sphereGeometry2 = new THREE.SphereGeometry(10, 60, 60, 0);
+    var sphereMaterial2 = new THREE.MeshLambertMaterial({
+      color: 0xFFFFFF,
+      map: THREE.ImageUtils.loadTexture("images/worldtexture.jpg")
+    });
+      */
+    /* --add particle renderer */
 
-  app.spotLight = new THREE.SpotLight( 0xFFFFFF );
-  app.spotLight.position.set(500, 100, 100);
-
-  /* --shadow off while testing (or to save battery)
-  app.spotLight.castShadow = true;
-  */
-  app.scene.add( app.spotLight );
-
-//backlight
-
-  app.spotLight = new THREE.SpotLight( 0xFFFFFF );
-  app.spotLight.position.set(-500, 100, 400);
-
-  /* --shadow off while testing (or to save battery)
-  app.spotLight.castShadow = true;
-  */
-  app.scene.add( app.spotLight );
+    /////////////////////////////////////////////
 
 
-  //test cube for light
-  // var sphereGeometry2 = new THREE.SphereGeometry(10, 60, 60, 0);
-  // var sphereMaterial2 = new THREE.MeshLambertMaterial({
-  //   color: 0xFFFFFF,
-  //   map: THREE.ImageUtils.loadTexture("images/worldtexture.jpg")
-  // });
-  //
-  // app.sphere2 = new THREE.Mesh(sphereGeometry, sphereMaterial);
-  //
-  // app.sphere.position.set(-500, 00, 00);
-  // // app.sphere.castShadow = true;
-  // app.scene.add( app.sphere2 );
+    ////////////////////////////////////////////
+    //////////// Controls for orbit ///////////
+    //////////////////////////////////////////
+
+    app.controls = new THREE.OrbitControls(app.camera, app.renderer.domElement);
+    app.gui = new dat.GUI();
+    app.gui.add(app.controller, 'rotationSpeed', 0, 0.1);
+    app.stats = app.addStats();
+
+    document.getElementById("output").appendChild(app.renderer.domElement);
+
+    app.animate();
+
+    ///
+
+    // simple function that converts the density data to the markers on screen
+    // the height of each marker is relative to the density.
+    function addDensity(data) {
+
+      // the geometry that will contain all our cubes
+      var geom = new THREE.Geometry();
+      // material to use for each of our elements. Could use a set of materials to
+      // add colors relative to the density. Not done here.
+      var cubeMat = new THREE.MeshLambertMaterial({
+        color: 0xff0000,
+        opacity: 0.6,
+        emissive: 0xffffff
+      });
+      for (var i = 0; i < data.length - 1; i++) {
+
+        var value = 50;
+
+        // calculate the position where we need to start the cube
+        var position = latLongToVector3(data[i][1], data[i][0], 100, 1);
+
+        var cubeMat = new THREE.MeshLambertMaterial({
+          color: 0xff0000,
+          opacity: 0.6
+        });
+        var cube = new THREE.Mesh(new THREE.CubeGeometry(2, 2, 2));
+        cube.position.x = position.x;
+        cube.position.y = position.y;
+        cube.position.z = position.z;
+
+        // position the cube correctly
+        cube.lookAt(new THREE.Vector3(0, 0, 0));
+
+        // merge with main model
+        cube.updateMatrix();
+        geom.merge(cube.geometry, cube.matrix);
+      }
+
+      // create a new mesh, containing all the other meshes.
+      var material = new THREE.MeshPhongMaterial({
+        color: 0xFF0000
+      });
+      var total = new THREE.Mesh(geom, material);
+
+      // and add the total mesh to the scene
+      //console.log(app.scene);
+
+      app.scene.add(total);
+    }
+
+    var renderOverlay = function(points) {
+      // testing
+
+      // the geometry that will contain all our cubes
+      var geom = new THREE.Geometry();
+      // material to use for each of our elements. Could use a set of materials to
+      // add colors relative to the density. Not done here.
+      var cubeMat = new THREE.MeshLambertMaterial({
+        color: 0xff0000,
+        opacity: 0.6,
+        emissive: 0xffffff
+      });
+      for (var i = 0; i < points.length; i++) {
+
+        var value = 50;
+
+        // calculate the position where we need to start the cube
+        var position = latLongToVector3(points[i][1], points[i][0], 100, 0);
+        // console.log(position, data[i][0], data[i][1]);
+        // create the cube
+        //var cube = new THREE.Mesh(new THREE.CubeGeometry(5,5,1+value/8,1,1,1,cubeMat));
 
 
-/* --add particle renderer */
+        var cubeMat = new THREE.MeshPhongMaterial({
+          color: 0xff0000,
+          opacity: 0.6
+        });
+        var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 5));
+        cube.position.x = position.x;
+        cube.position.y = position.y;
+        cube.position.z = position.z;
 
-/////////////////////////////////////////////
+        // position the cube correctly
+        cube.lookAt(new THREE.Vector3(0, 0, 0));
 
-//
-// var lat = 28.165547;
-// var long = 71.185474;
-// var testpoint = latLongToVector3(lat, long, 100, 0.1);
-// console.log(testpoint);
-//
-// var cubeMat = new THREE.MeshLambertMaterial({color: 0xff0000, opacity:0.6});
-// var cube = new THREE.Mesh(new THREE.CubeGeometry(2, 2, 2));
-// cube.position.x = testpoint.x; //new THREE.Vector3(100, 100, 100); //testpoint;
-// cube.position.y = testpoint.y; //new THREE.Vector3(100, 100, 100); //testpoint;
-// cube.position.z = testpoint.z; //new THREE.Vector3(100, 100, 100); //testpoint;
-// app.scene.add(cube);
-// app.testcube = cube;
+        // merge with main model
+        cube.updateMatrix();
+        geom.merge(cube.geometry, cube.matrix);
+      }
 
-////////////////////////////////////////////
-//////////// Controls for orbit ///////////
-//////////////////////////////////////////
+      // create a new mesh, containing all the other meshes.
+      var material = new THREE.MeshPhongMaterial({
+        color: 0xff0000
+      });
+      var total = new THREE.Mesh(geom, material);
 
-  app.controls = new THREE.OrbitControls( app.camera, app.renderer.domElement );
+      // and add the total mesh to the scene
+      //console.log(app.scene);
 
-  app.gui = new dat.GUI();
-  app.gui.add(app.controller, 'rotationSpeed', 0, 0.1);
-  app.stats = app.addStats();
+      app.scene.add(total);
+    }
+    /////////////////////////////////////////////////////
+    ////////// array to loop through json file /////////
+    ///////////////////////////////////////////////////
+    $.getJSON("/js/list.geo.json", function(json) {
+      // console.log(json);
+      app.jsondata = json;
+      addDensity(json);
 
-  document.getElementById("output").appendChild( app.renderer.domElement );
-
-  app.animate();
-
-  $.getJSON("/js/list.geo.json", function(json){
-
-    console.log(json);
-    app.jsondata = json;
-    addDensity(json);
-  });
-
-
-}
-/////////////////////////////////////////////
+      allCountries = json['features'];
+      for (var i = 0; i < allCountries.length; i++) {
+        var points = [];
+        var country = allCountries[i];
+        var isSingleLandMass = country.geometry.coordinates.length === 1;
+        if (isSingleLandMass) {
+          var landmass = country.geometry.coordinates[0];
+          for (var j = 0; j < landmass.length; j++) {
+            points.push(landmass[j])
+          }
+          renderOverlay(points);
+          // create shape
+        } else { //multiple landmasses
+          for (var n = 0; n < country.geometry.coordinates.length; n++) {
+            points = [];
+            var landmass = country.geometry.coordinates[n][0];
+            for (var x = 0; x < landmass.length; x++) {
+              points.push(landmass[x]);
+            }
+            renderOverlay(points);
+          }
+        }
+      }
+    });
+  }
+  /////////////////////////////////////////////
 
 
 
@@ -181,7 +288,7 @@ app.init = function() {
 
 window.onload = app.init;
 
-app.addStats = function(){
+app.addStats = function() {
 
   var stats = new Stats();
   stats.setMode(0);
@@ -190,12 +297,11 @@ app.addStats = function(){
   stats.domElement.style.top = '0px';
   stats.domElement.style.left = '0px';
 
-  document.getElementById("stats").appendChild( stats.domElement );
+  document.getElementById("stats").appendChild(stats.domElement);
 
   return stats;
 };
 /////////////////////////////////////////////
-
 
 
 /////////////////////////////////////////////
@@ -210,7 +316,7 @@ app.addStats = function(){
 ////////// update view on resize ///////////
 ///////////////////////////////////////////
 
-app.onResize = function(){
+app.onResize = function() {
 
   app.width = window.innerWidth;
   app.height = window.innerHeight;
@@ -232,75 +338,13 @@ window.addEventListener("resize", app.onResize);
 /// change from cartesian co-ords to long + lat ///
 //////////////////////////////////////////////////
 function latLongToVector3(lat, lon, radius, height) {
-    var phi = (lat)*Math.PI/180;
-    var theta = (lon-180)*Math.PI/180;
+  var phi = (lat) * Math.PI / 180;
+  var theta = (lon - 180) * Math.PI / 180;
 
-    var x = -(radius+height) * Math.cos(phi) * Math.cos(theta);
-    var y = (radius+height) * Math.sin(phi);
-    var z = (radius+height) * Math.cos(phi) * Math.sin(theta);
+  var x = -(radius + height) * Math.cos(phi) * Math.cos(theta);
+  var y = (radius + height) * Math.sin(phi);
+  var z = (radius + height) * Math.cos(phi) * Math.sin(theta);
 
-    return new THREE.Vector3(x,y,z);
+  return new THREE.Vector3(x, y, z);
 }
 /////////////////////////////////////////////
-
-// simple function that converts the density data to the markers on screen
-// the height of each marker is relative to the density.
-function addDensity(data) {
-
-
-data = data.features[2].geometry.coordinates[0];
-//first loop: over data.features[]
-  for (var i = 0; i < data.features.length; i++) {
-    data.features[i]
-  }
-  //2nd loop: over data.features[n].geometry.coordinates[] - in case of multiple shapes
-
-      //third loop: over each set of points, as below: coordinates.length
-
-
-    // the geometry that will contain all our cubes
-    var geom = new THREE.Geometry();
-    // material to use for each of our elements. Could use a set of materials to
-    // add colors relative to the density. Not done here.
-    var cubeMat = new THREE.MeshLambertMaterial({color: 0x000000,opacity:0.6, emissive:0xffffff});
-    for (var i = 0 ; i < data.length-1 ; i++) {
-
-        //get the data, and set the offset, we need to do this since the x,y coordinates
-        //from the data aren't in the correct format
-        //var x = parseInt(data[i][0])+180;
-        //var y = parseInt((data[i][1])-84)*-1;
-        var value = 50; //parseFloat(data[i][2]);
-
-        //var lat = 28.165547;
-        //var long = 71.185474;
-
-        // calculate the position where we need to start the cube
-        var position = latLongToVector3(data[i][0], data[i][1], 100, 1);
-        // console.log(position, data[i][0], data[i][1]);
-        // create the cube
-        //var cube = new THREE.Mesh(new THREE.CubeGeometry(5,5,1+value/8,1,1,1,cubeMat));
-
-
-        var cubeMat = new THREE.MeshLambertMaterial({color: 0xff0000, opacity:0.6});
-        var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1));
-        cube.position.x = position.x;
-        cube.position.y = position.y;
-        cube.position.z = position.z;
-        // position the cube correctly
-
-        //cube.lookAt( new THREE.Vector3(0,0,0) );
-
-        // merge with main model
-        cube.updateMatrix();
-        geom.merge(cube.geometry, cube.matrix);
-    }
-
-    // create a new mesh, containing all the other meshes.
-    var matty = new THREE.MeshPhongMaterial({color: 0xFF0000});
-    var total = new THREE.Mesh(geom, matty);
-
-    // and add the total mesh to the scene
-    //console.log(app.scene);
-
-    app.scene.add(total);
-}
