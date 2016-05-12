@@ -28,3 +28,20 @@ body {
   font-size: 14px;
   text-align: center;
 }
+
+.append-data {
+  position: absolute;
+  right: 0;
+  top: 100px;
+  margin: 0 15px 0 0;
+  max-width: 200px;
+  padding: 10px 20px;
+  color: gainsboro;
+  border: 1px solid gainsboro;
+}
+
+.append-data h3 {
+  font-size: 18px;
+  margin: 0;
+  padding: 5px;
+}
